@@ -39,3 +39,21 @@ class LoRALinear(nn.Module):
             # DoRA: Magnitude vector 'm'
             # Initialize with the magnitude of the original weight matrix
             self.m = nn.Parameter(original_layer.weight.data.norm(p=2, dim=1, keepdim=True))
+
+    def forward(self, x):
+        if not self.use_dora:
+            # Standard LoRA logic
+            original_out = self.original_layer(x)
+            lora_out = (x @ self.lora.lora_A.t()) @ self.lora.lora_B.t()
+            return original_out + (lora_out * self.lora.scaling)
+        else:
+            # DoRA Logic: Reconstruct weight W' = m * (W + BA) / ||W + BA||
+            W_orig = self.original_layer.weight
+            delta_W = (self.lora.lora_B @ self.lora.lora_A) * self.lora.scaling
+            W_combined = W_orig + delta_W
+            
+            # Normalize direction and apply magnitude m
+            column_norm = W_combined.norm(p=2, dim=1, keepdim=True)
+            W_dora = self.m * (W_combined / column_norm)
+            
+            return F.linear(x, W_dora, self.original_layer.bias)
