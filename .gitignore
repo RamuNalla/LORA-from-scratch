@@ -1,0 +1,36 @@
+# --- Byte-compiled / optimized / DLL files ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Environments ---
+# It is better to share a requirements.txt than the actual env folder
+.venv/
+venv/
+env/
+bin/
+include/
+lib/
+
+# --- Large Model Files & Weights ---
+# Do NOT upload base models or huge checkpoints
+models/
+!models/checkpoints/   # Keep the folder structure
+models/checkpoints/*.pt # Git will ignore your weights; you can list them in the README instead
+*.bin
+*.h5
+*.safetensors
+
+# --- Jupyter Notebook Checkpoints ---
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# --- OS generated files ---
+.DS_Store
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# --- Streamlit ---
+.streamlit/
