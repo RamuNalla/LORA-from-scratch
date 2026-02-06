@@ -10,3 +10,5 @@ def print_trainable_parameters(model):
     print(f"Total Params: {all_param:,}")
     print(f"Trainable Params: {trainable_params:,} ({percent:.4f}%)")
     return {"total": all_param, "trainable": trainable_params, "percent": percent}
+
+    # test
